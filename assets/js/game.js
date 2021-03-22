@@ -122,5 +122,6 @@ function countdown() {
         displayMessage();
       }
     }, 1000);
+    
   }
 countdown()
