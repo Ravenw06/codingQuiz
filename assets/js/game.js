@@ -45,22 +45,7 @@ let questions = [
         choice4 : 'HTML', 
         answer: 2,
     },
-    {
-        question: 'What is HTML stands for?',
-        choice1 : 'HTML', 
-        choice2 : 'HTML', 
-        choice3 : 'HTML', 
-        choice4 : 'HTML', 
-        answer: 2,
-    },
-    {
-        question: 'What is HTML stands for?',
-        choice1 : 'HTML', 
-        choice2 : 'HTML', 
-        choice3 : 'HTML', 
-        choice4 : 'HTML', 
-        answer: 2,
-    },
+
 ]
 const SCORE_POINTS = 100
 const MAX_QUESTIONS = 4
