@@ -1,127 +1,125 @@
-const question = document.querySelector('#question');
-const choices = Array.from(document.querySelectorAll('.choice-text'));
-const progressText = document.querySelector('#progressText');
-const scoreText = document.querySelector('#score');
-const progressBarFull = document.querySelector('#progressBarFull');
-var timerEl = document.getElementById('countdown');
-var mainEl = document.getElementById('main');
+const question = document.querySelector("#question");
+const choices = Array.from(document.querySelectorAll(".choice-text"));
+const progressText = document.querySelector("#progressText");
+const scoreText = document.querySelector("#score");
+const progressBarFull = document.querySelector("#progressBarFull");
+var timerEl = document.getElementById("countdown");
+var mainEl = document.getElementById("main");
 
-let currentQuestion = {}
-let acceptingAnswers = true
-let score = 0
-let questionCounter = 0
-let availableQuestions = []
+let currentQuestion = {};
+let acceptingAnswers = true;
+let score = 0;
+let questionCounter = 0;
+let availableQuestions = [];
 
 let questions = [
-    {
-        question: 'What is HTML stands for?',
-        choice1 : 'Home To Mama\'s Love', 
-        choice2 : 'Hypertext Markup Language', 
-        choice3 : 'Happy To Meet Lily', 
-        choice4 : 'Hover To My Left', 
-        answer: 2,
-    },
-    {
-        question: 'What is CSS stands for?',
-        choice1 : 'Cannot Say Sorry', 
-        choice2 : 'Cascading Style Sheets', 
-        choice3 : 'Cam Sing sexily', 
-        choice4 : 'Come Sing Santa', 
-        answer: 2,
-    },
-    {
-        question: 'What is JS stands for?',
-        choice1 : 'Just Say', 
-        choice2 : 'JavaScript', 
-        choice3 : 'Juice Straw', 
-        choice4 : 'Justin Swim', 
-        answer: 2,
-    },
-    {
-        question: 'What is DOM stands for?',
-        choice1 : 'Do order mango', 
-        choice2 : 'Document Object Model', 
-        choice3 : 'Die Over Math', 
-        choice4 : 'Dad Order Masks ', 
-        answer: 2,
-    },
-
-]
-const SCORE_POINTS = 100
-const MAX_QUESTIONS = 4
+  {
+    question: "What is HTML stands for?",
+    choice1: "Home To Mama's Love",
+    choice2: "Hypertext Markup Language",
+    choice3: "Happy To Meet Lily",
+    choice4: "Hover To My Left",
+    answer: 2,
+  },
+  {
+    question: "What is CSS stands for?",
+    choice1: "Cannot Say Sorry",
+    choice2: "Cascading Style Sheets",
+    choice3: "Cam Sing sexily",
+    choice4: "Come Sing Santa",
+    answer: 2,
+  },
+  {
+    question: "What is JS stands for?",
+    choice1: "Just Say",
+    choice2: "JavaScript",
+    choice3: "Juice Straw",
+    choice4: "Justin Swim",
+    answer: 2,
+  },
+  {
+    question: "What is DOM stands for?",
+    choice1: "Do order mango",
+    choice2: "Document Object Model",
+    choice3: "Die Over Math",
+    choice4: "Dad Order Masks ",
+    answer: 2,
+  },
+];
+const SCORE_POINTS = 100;
+const MAX_QUESTIONS = 4;
 
 startGame = () => {
-    questionCounter = 0; 
-    score = 0
-    availableQuestions = [...questions]
-    getNewQuestion()
-}
+  questionCounter = 0;
+  score = 0;
+  availableQuestions = [...questions];
+  getNewQuestion();
+};
 
 getNewQuestion = () => {
-    if(availableQuestions.length === 0 || questionCounter > MAX_QUESTIONS) {
-        localStorage.setItem('mostRecentScore', score)
-        return window.location.assign('/end.html')
+  if (availableQuestions.length === 0 || questionCounter > MAX_QUESTIONS) {
+    localStorage.setItem("mostRecentScore", score);
+    
+    return window.location.assign("/codingQuiz/end.html");
+  }
+  questionCounter++;
+  progressText.innerText = `Question ${questionCounter} of ${MAX_QUESTIONS}`;
+  progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
+
+  const questionIndex = Math.floor(Math.random() * availableQuestions.length);
+  currentQuestion = availableQuestions[questionIndex];
+  question.innerText = currentQuestion.question;
+
+  choices.forEach((choice) => {
+    const number = choice.dataset["number"];
+    choice.innerText = currentQuestion["choice" + number];
+  });
+  availableQuestions.splice(questionIndex, 1);
+
+  acceptingAnswers = true;
+};
+
+choices.forEach((choice) => {
+  choice.addEventListener("click", (e) => {
+    if (!acceptingAnswers) return;
+
+    acceptingAnswers = false;
+    const selectedChoice = e.target;
+    const selectedAnswer = selectedChoice.dataset["number"];
+
+    let classToApply =
+      selectedAnswer == currentQuestion.answer ? "correct" : "incorrect";
+    if (classToApply === "correct") {
+      incrementScore(SCORE_POINTS);
     }
-    questionCounter++
-    progressText.innerText = `Question ${questionCounter} of ${MAX_QUESTIONS}`
-    progressBarFull. style.width = `${(questionCounter/MAX_QUESTIONS)*100}%`
 
-    const questionIndex = Math.floor(Math.random() *availableQuestions.length)
-    currentQuestion = availableQuestions[questionIndex]
-    question.innerText = currentQuestion.question
+    selectedChoice.parentElement.classList.add(classToApply);
 
-    choices.forEach(choice => {
-        const number = choice.dataset['number']
-        choice.innerText = currentQuestion['choice' + number]
+    setTimeout(() => {
+      selectedChoice.parentElement.classList.remove(classToApply);
+      getNewQuestion();
+    }, 1000);
+  });
+});
 
-    })
-    availableQuestions.splice(questionIndex, 1)
-
-    acceptingAnswers = true
-}
-
-choices.forEach(choice => {
-    choice.addEventListener('click', e => {
-        if(!acceptingAnswers) return
-
-        acceptingAnswers = false
-        const selectedChoice = e.target
-        const selectedAnswer = selectedChoice.dataset['number']
-
-        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
-        if(classToApply === 'correct') {
-            incrementScore(SCORE_POINTS)
-        }
-
-        selectedChoice.parentElement.classList.add(classToApply)
-
-        setTimeout(() =>{
-            selectedChoice.parentElement.classList.remove(classToApply)
-            getNewQuestion()
-
-        }, 1000)
-    })
-})
-
-incrementScore = num => {
-    score += num
-    scoreText.innerText = score
-}
-startGame()
+incrementScore = (num) => {
+  score += num;
+  scoreText.innerText = score;
+};
+startGame();
 
 function countdown() {
-    var timeLeft = 60;
-  
-    var timeInterval = setInterval(function() {
-      if (timeLeft > 1) {
-        timerEl.textContent = timeLeft + "s";
-        timeLeft--;
-      } else {
-        timerEl.textContent = '';
-        clearInterval(timeInterval);
-        displayMessage();
-      }
-    }, 1000);
+  var timeLeft = 60;
 
-  }
-countdown()
+  var timeInterval = setInterval(function () {
+    if (timeLeft > 1) {
+      timerEl.textContent = timeLeft + "s";
+      timeLeft--;
+    } else {
+      timerEl.textContent = "";
+      clearInterval(timeInterval);
+      displayMessage();
+    }
+  }, 1000);
+}
+countdown();
