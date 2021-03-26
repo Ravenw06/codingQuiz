@@ -2,6 +2,10 @@
   background-color: cadetblue;
 }
 
+.hide {
+  /* visibility: hidden; */
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
