@@ -1,6 +1,7 @@
 const question = document.querySelector("#question");
 const choices = Array.from(document.querySelectorAll(".choice-text"));
 const progressText = document.querySelector("#progressText");
+const endLink = document.querySelector("#endLink");
 const scoreText = document.querySelector("#score");
 const progressBarFull = document.querySelector("#progressBarFull");
 var timerEl = document.getElementById("countdown");
